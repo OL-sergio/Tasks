@@ -10,14 +10,15 @@ class RetrofitClient private constructor() {
     companion object {
 
         private lateinit var retrofit : Retrofit
-        private const val baseURL = "http://devmasterteam.com/CursoAndroidAPI/"
+        private const val Base_URL = "http://devmasterteam.com/CursoAndroidAPI/"
+
 
         private fun   getRetrofitInstance() : Retrofit {
 
             val httpClient = OkHttpClient.Builder()
             if (!Companion::retrofit.isInitialized){
                 retrofit = Retrofit.Builder()
-                    .baseUrl(baseURL)
+                    .baseUrl(Base_URL)
                     .client(httpClient.build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
