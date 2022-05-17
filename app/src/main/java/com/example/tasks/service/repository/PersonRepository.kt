@@ -23,7 +23,6 @@ class PersonRepository(val context: Context) {
         call.enqueue(object : Callback<HeaderModel> {
             override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
                 if (response.code() != TaskConstants.HTTP.SUCCESS){
-
                     val validation =  Gson().fromJson(response.errorBody()!!.toString(), String::class.java)
                     listener.onFailure(validation)
 
