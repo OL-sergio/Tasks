@@ -22,7 +22,7 @@ interface TaskService {
     @POST("Task")
     @FormUrlEncoded
     fun create(
-        @Field("PriorityId") priorityId: String,
+        @Field("PriorityId") priorityId: Int,
         @Field("Description") description: String,
         @Field("DueDate") dueDate: String,
         @Field("Complete") complete: Boolean
@@ -31,8 +31,8 @@ interface TaskService {
     @HTTP(method = "PUT", path = "Task", hasBody = true)
     @FormUrlEncoded
     fun update(
-        @Field("Id") id: String,
-        @Field("PriorityId") priorityId: String,
+        @Field("Id") id: Int,
+        @Field("PriorityId") priorityId: Int,
         @Field("Description") description: String,
         @Field("DueDate") dueDate: String,
         @Field("Complete") complete: Boolean
@@ -41,19 +41,19 @@ interface TaskService {
     @HTTP(method = "PUT", path = "Task/Complete", hasBody = true)
     @FormUrlEncoded
     fun complete(
-        @Field("Id") id: String
+        @Field("Id") id: Int
     ): Call<Boolean>
 
     @HTTP(method = "PUT", path = "Task/Undo", hasBody = true)
     @FormUrlEncoded
     fun update(
-        @Field("Id") id: String
+        @Field("Id") id: Int
     ): Call<Boolean>
 
     @HTTP(method = "DELETE", path = "Task", hasBody = true)
     @FormUrlEncoded
     fun delete(
-        @Field("Id") id: String
+        @Field("Id") id: Int
     ): Call<Boolean>
 
 }

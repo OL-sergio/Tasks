@@ -1,6 +1,6 @@
 package com.example.tasks.service.listener
 
-class ValidationListener (str: String = "") {
+class ValidationListener (str: String = "")  {
 
     private var mStatus: Boolean = true
     private var mMessage: String =  ""
