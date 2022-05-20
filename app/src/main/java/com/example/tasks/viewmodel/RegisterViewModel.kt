@@ -39,7 +39,7 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun listPriorities() {
-        TODO("Not yet implemented")
+
     }
 
 }

@@ -62,7 +62,6 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             for (item in it ){
                 list.add(item.description)
                 mListPriorityId.add(item.id)
-
             }
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
