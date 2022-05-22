@@ -1,6 +1,5 @@
 package com.example.tasks.service.repository.remote
 
-import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.model.TaskModel
 import retrofit2.Call
 import retrofit2.http.*
@@ -52,8 +51,6 @@ interface TaskService {
 
     @HTTP(method = "DELETE", path = "Task", hasBody = true)
     @FormUrlEncoded
-    fun delete(
-        @Field("Id") id: Int
-    ): Call<Boolean>
+    fun delete(@Field("Id") id: Int): Call<Boolean>
 
 }
