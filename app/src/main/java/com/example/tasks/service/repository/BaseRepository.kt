@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
-open class BaseRepository {
+open class BaseRepository (context: Context){
 
     fun isConnectionAvailable(context: Context): Boolean {
         var result = false
