@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.constants.TaskConstants
+import com.example.tasks.service.helper.FingerprintHelper
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidationListener
 import com.example.tasks.service.model.HeaderModel
@@ -23,9 +24,13 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val mLogin = MutableLiveData<ValidationListener>()
     val login: LiveData<ValidationListener> = mLogin
 
+
     private val mLoggedUser = MutableLiveData<Boolean>()
     val loggedUser: LiveData<Boolean> = mLoggedUser
 
+
+    private val mFingerprint = MutableLiveData<Boolean>()
+    val fingerprint: LiveData<Boolean> = mFingerprint
     /**
      * Faz login usando API
      */
@@ -52,7 +57,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Verifica se usuário está logado
      */
-    fun verifyLoggedUser() {
+    /*fun verifyLoggedUser() {
 
         val token = mSharedPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val person = mSharedPreferences.get(TaskConstants.SHARED.PERSON_KEY)
@@ -66,6 +71,25 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
         mLoggedUser.value  = logged
 
-    }
+    }*/
 
+    fun isAuthenticationAvailable() {
+
+        val token = mSharedPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
+        val person = mSharedPreferences.get(TaskConstants.SHARED.PERSON_KEY)
+
+        RetrofitClient.addHeader(token, person)
+
+        val everLogged = ( token != "" && person != "" )
+
+        if (!everLogged){
+            mPriorityRepository.all()
+        }
+        mLoggedUser.value  = everLogged
+
+
+        if (FingerprintHelper.isAuthenticationAvailable(getApplication())){
+            mFingerprint.value = everLogged
+        }
+    }
 }

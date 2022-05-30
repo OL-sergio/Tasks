@@ -19,9 +19,11 @@ open class BaseRepository (context: Context){
                 else -> false
             }
         } else {
+            @Suppress("DEPRECATION")
             cm.run {
                 cm.activeNetworkInfo?.run {
                     result = when (type) {
+                        ConnectivityManager.TYPE_WIFI -> true
                         ConnectivityManager.TYPE_MOBILE -> true
                         ConnectivityManager.TYPE_ETHERNET -> true
                         else -> false
@@ -30,7 +32,6 @@ open class BaseRepository (context: Context){
                 }
             }
         }
-
         return result
     }
 }
