@@ -1,7 +1,6 @@
 package com.example.tasks.view
 
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -11,20 +10,27 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.example.tasks.R
+import com.example.tasks.databinding.ActivityMainBinding
 import com.example.tasks.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
+
+
+    private var _binding:  ActivityMainBinding?  = null
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var mViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+         _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(_binding!!.root)
 
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -54,9 +60,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+
+        val drawerLayout: DrawerLayout = _binding!!.drawerLayout
+        val navView: NavigationView =  _binding!!.navView
+        val navHostFragment  =  supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+   
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired, R.id.nav_logout),
             drawerLayout
@@ -79,10 +88,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun observe() {
         mViewModel.userName.observe(this, Observer {
-            val nav = findViewById<NavigationView>(R.id.nav_view)
+            val nav = _binding!!.navView
             val header = nav.getHeaderView(0)
-
-            header.findViewById<TextView>(R.id.text_name).text = it
+                header.findViewById<TextView>(R.id.text_name).text = it
         })
 
         mViewModel.logout.observe(this, Observer {
@@ -90,4 +98,5 @@ class MainActivity : AppCompatActivity() {
             finish()
         })
     }
+
 }

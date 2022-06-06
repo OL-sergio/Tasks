@@ -8,16 +8,19 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.databinding.ActivityRegisterBinding
 import com.example.tasks.viewmodel.RegisterViewModel
-import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
+
+    private var _binding: ActivityRegisterBinding? = null
 
     private lateinit var mViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        _binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(_binding!!.root)
 
         mViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
@@ -30,9 +33,9 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         val id = v.id
         if (id == R.id.button_save) {
 
-            val name = edit_name.text.toString()
-            val email = edit_email.text.toString()
-            val password = edit_password.text.toString()
+            val name = _binding!!.editName.text.toString()
+            val email = _binding!!.editEmail.text.toString()
+            val password = _binding!!.editPassword.text.toString()
 
             mViewModel.create(name, email, password)
         }
@@ -50,6 +53,6 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun listeners() {
-        button_save.setOnClickListener(this)
+       _binding!!.buttonSave.setOnClickListener(this)
     }
 }

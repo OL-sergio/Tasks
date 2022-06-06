@@ -10,18 +10,20 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tasks.R
+import com.example.tasks.databinding.ActivityLoginBinding
 import com.example.tasks.viewmodel.LoginViewModel
-import kotlinx.android.synthetic.main.activity_login.*
 import java.util.concurrent.Executor
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var mViewModel: LoginViewModel
 
+    private var _binding: ActivityLoginBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(_binding!!.root)
 
         mViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
@@ -75,8 +77,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
      * Inicializa os eventos de click
      */
     private fun setListeners() {
-        button_login.setOnClickListener(this)
-        text_register.setOnClickListener(this)
+        _binding!!.buttonLogin.setOnClickListener(this)
+        _binding!!.textRegister.setOnClickListener(this)
     }
 
     /**
@@ -121,8 +123,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
      * Autentica usuário
      */
     private fun handleLogin() {
-        val email = edit_email.text.toString()
-        val password = edit_password.text.toString()
+        val email = _binding!!.editEmail.text.toString()
+        val password = _binding!!.editPassword.text.toString()
 
         mViewModel.doLogin(email, password)
     }

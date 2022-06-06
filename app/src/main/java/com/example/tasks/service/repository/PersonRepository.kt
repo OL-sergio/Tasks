@@ -2,9 +2,9 @@ package com.example.tasks.service.repository
 
 import android.content.Context
 import com.example.tasks.R
-import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
+import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.repository.remote.PersonService
 import com.example.tasks.service.repository.remote.RetrofitClient
 import com.google.gson.Gson
@@ -28,7 +28,7 @@ class PersonRepository(val context: Context) : BaseRepository(context){
         call.enqueue(object : Callback<HeaderModel> {
             override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
                 if (response.code() != TaskConstants.HTTP.SUCCESS){
-                    val validation =  Gson().fromJson(response.errorBody()!!.toString(), String::class.java)
+                    val validation =  Gson().fromJson(response.errorBody().toString(), String::class.java)
                     listener.onFailure(validation)
 
                 }else {
@@ -54,7 +54,7 @@ class PersonRepository(val context: Context) : BaseRepository(context){
             override fun onResponse(call: Call<HeaderModel>, response: Response<HeaderModel>) {
                 if (response.code() != TaskConstants.HTTP.SUCCESS){
 
-                    val validation =  Gson().fromJson(response.errorBody()!!.toString(), String::class.java)
+                    val validation =  Gson().fromJson(response.errorBody().toString(), String::class.java)
                     listener.onFailure(validation)
 
                 }else {

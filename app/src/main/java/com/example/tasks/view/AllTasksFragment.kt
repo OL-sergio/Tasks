@@ -13,12 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
+import com.example.tasks.databinding.FragmentAllTasksBinding
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.view.adapter.TaskAdapter
 import com.example.tasks.viewmodel.AllTasksViewModel
 
 class AllTasksFragment : Fragment() {
+
+    private var _binding : FragmentAllTasksBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var mViewModel: AllTasksViewModel
     private lateinit var mListener: TaskListener
@@ -28,12 +32,14 @@ class AllTasksFragment : Fragment() {
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         mViewModel = ViewModelProvider(this).get(AllTasksViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_all_tasks, container, false)
+
+        _binding = FragmentAllTasksBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
         //Filter Tasks
         mTaskFilter = arguments!!.getInt(TaskConstants.BUNDLE.TASKFILTER, 0)
 
-        val recycler = root.findViewById<RecyclerView>(R.id.recycler_all_tasks)
+        val recycler = _binding!!.recyclerAllTasks
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = mAdapter
 
