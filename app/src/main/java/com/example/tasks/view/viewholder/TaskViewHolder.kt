@@ -1,13 +1,10 @@
 package com.example.tasks.view.viewholder
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
+import com.example.tasks.databinding.RowTaskListBinding
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.service.model.TaskModel
 import com.example.tasks.service.repository.PriorityRepository
@@ -15,49 +12,50 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class TaskViewHolder(itemView: View, val listener: TaskListener) :
-    RecyclerView.ViewHolder(itemView) {
+class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: TaskListener) :
+    RecyclerView.ViewHolder(itemBinding.root) {
 
     private val mDateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
-    private val mPriorityRepository= PriorityRepository(itemView.context)
-
-    private var mTextDescription: TextView = itemView.findViewById(R.id.text_description)
-    private var mTextPriority: TextView = itemView.findViewById(R.id.text_priority)
-    private var mTextDueDate: TextView = itemView.findViewById(R.id.text_due_date)
-    private var mImageTask: ImageView = itemView.findViewById(R.id.image_task)
+    private val mPriorityRepository = PriorityRepository(itemView.context)
 
     /**
      * Atribui valores aos elementos de interface e também eventos
      */
 
-    @SuppressLint("SimpleDateFormat")
     fun bindData(task: TaskModel) {
 
-        this.mTextDescription.text = task.description
-        this.mTextPriority.text = mPriorityRepository.getDescrition(task.priorityId)
+        itemBinding.textDescription.text = ""
+        itemBinding.textPriority.text = ""
+        itemBinding.textDueDate.text = ""
+
+
+        itemBinding.textDescription.text = task.description
+        itemBinding.textPriority.text = mPriorityRepository.getDescrition(task.priorityId)
 
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate)
-        this.mTextDueDate.text = mDateFormat.format(date!!)
+        itemBinding.textDueDate.text = mDateFormat.format(date!!)
+
 
         if (task.complete){
-            mTextDescription.setTextColor(Color.GRAY)
-            mImageTask.setImageResource(R.drawable.ic_done)
+            itemBinding.textDescription.setTextColor(Color.GRAY)
+            itemBinding.imageTask.setImageResource(R.drawable.ic_done)
+
         }else {
-            mTextDescription.setTextColor(Color.BLACK)
-            mImageTask.setImageResource(R.drawable.ic_todo)
+            itemBinding.textDescription.setTextColor(Color.BLACK)
+            itemBinding.imageTask.setImageResource(R.drawable.ic_todo)
         }
+
         // Eventos
-         mTextDescription.setOnClickListener { listener.onListClick(task.id) }
-        mImageTask.setOnClickListener {
+        itemBinding.textDescription.setOnClickListener { listener.onListClick(task.id) }
+        itemBinding.imageTask.setOnClickListener {
             if (task.complete) {
                 listener.onUndoClick(task.id)
             }else {
                 listener.onCompleteClick(task.id)
             }
-
         }
 
-        mTextDescription.setOnLongClickListener {
+        itemBinding.textDescription.setOnLongClickListener {
             AlertDialog.Builder(itemView.context)
                 .setTitle(R.string.remocao_de_tarefa)
                 .setMessage(R.string.remover_tarefa)

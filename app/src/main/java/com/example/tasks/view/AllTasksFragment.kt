@@ -29,7 +29,7 @@ class AllTasksFragment : Fragment() {
     private val mAdapter = TaskAdapter()
     private var mTaskFilter  = 0
 
-    @SuppressLint("UseRequireInsteadOfGet")
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         mViewModel = ViewModelProvider(this).get(AllTasksViewModel::class.java)
 

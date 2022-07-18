@@ -11,7 +11,7 @@ import com.example.tasks.service.listener.ValidationListener
 import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.repository.PersonRepository
 import com.example.tasks.service.repository.PriorityRepository
-import com.example.tasks.service.repository.local.SecurityPreferences
+import com.example.tasks.service.repository.SecurityPreferences
 import com.example.tasks.service.repository.remote.RetrofitClient
 
 

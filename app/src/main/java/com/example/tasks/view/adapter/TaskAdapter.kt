@@ -3,7 +3,7 @@ package com.example.tasks.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tasks.R
+import com.example.tasks.databinding.RowTaskListBinding
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.service.model.TaskModel
 import com.example.tasks.view.viewholder.TaskViewHolder
@@ -14,9 +14,9 @@ class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
     private lateinit var mListener: TaskListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val item =
-            LayoutInflater.from(parent.context).inflate(R.layout.row_task_list, parent, false)
-        return TaskViewHolder(item, mListener)
+        val inflater = LayoutInflater.from(parent.context)
+        val itemBinding = RowTaskListBinding.inflate(inflater, parent, false)
+        return TaskViewHolder(itemBinding, mListener)
     }
 
     override fun getItemCount(): Int {
