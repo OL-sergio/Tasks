@@ -9,6 +9,7 @@ import com.example.tasks.service.helper.FingerprintHelper
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidationListener
 import com.example.tasks.service.model.PersonModel
+import com.example.tasks.service.model.PriorityModel
 import com.example.tasks.service.repository.PersonRepository
 import com.example.tasks.service.repository.PriorityRepository
 import com.example.tasks.service.repository.SecurityPreferences
@@ -67,9 +68,18 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         val logged = ( token != "" && person != "" )
 
         if (!logged){
-            priorityRepository.all()
+            priorityRepository.all(object : APIListener<List<PriorityModel>>{
+                override fun onSuccess(model: List<PriorityModel>) {
+                    val s = ""
+                }
+
+                override fun onFailure(message: String) {
+                    val S = ""
+                }
+
+            })
         }
-        mLoggedUser.value  = logged
+        _loggedUser.value  = logged
 
     }*/
 
@@ -83,7 +93,16 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         val everLogged = ( token != "" && person != "" )
 
         if (!everLogged){
-            priorityRepository.all()
+            priorityRepository.all(object : APIListener<List<PriorityModel>>{
+                override fun onSuccess(result: List<PriorityModel>) {
+                    priorityRepository.save(result)
+                }
+
+                override fun onFailure(message: String) {
+                    val S = ""
+                }
+
+            })
         }
         _loggedUser.value  = everLogged
 

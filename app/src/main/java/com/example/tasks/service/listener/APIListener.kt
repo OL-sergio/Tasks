@@ -2,7 +2,7 @@ package com.example.tasks.service.listener
 
 interface APIListener<T> {
 
-    fun onSuccess(model: T)
-    fun onFailure(str: String)
+    fun onSuccess(result: T)
+    fun onFailure(message: String)
 
 }
