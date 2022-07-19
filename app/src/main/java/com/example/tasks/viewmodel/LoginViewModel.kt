@@ -17,38 +17,38 @@ import com.example.tasks.service.repository.remote.RetrofitClient
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mPersonRepository = PersonRepository(application.applicationContext)
-    private val mPriorityRepository = PriorityRepository(application)
-    private val mSharedPreferences = SecurityPreferences(application)
+    private val personRepository = PersonRepository(application.applicationContext)
+    private val priorityRepository = PriorityRepository(application.applicationContext)
+    private val securityPreferences = SecurityPreferences(application.applicationContext)
 
-    private val mLogin = MutableLiveData<ValidationListener>()
-    val login: LiveData<ValidationListener> = mLogin
-
-
-    private val mLoggedUser = MutableLiveData<Boolean>()
-    val loggedUser: LiveData<Boolean> = mLoggedUser
+    private val _login = MutableLiveData<ValidationListener>()
+    val login: LiveData<ValidationListener> = _login
 
 
-    private val mFingerprint = MutableLiveData<Boolean>()
-    val fingerprint: LiveData<Boolean> = mFingerprint
+    private val _loggedUser = MutableLiveData<Boolean>()
+    val loggedUser: LiveData<Boolean> = _loggedUser
+
+
+    private val _fingerprint = MutableLiveData<Boolean>()
+    val fingerprint: LiveData<Boolean> = _fingerprint
     /**
      * Faz login usando API
      */
     fun doLogin(email: String, password: String) {
-        mPersonRepository.login(email, password, object : APIListener<PersonModel> {
-            override fun onSuccess(model: PersonModel) {
+        personRepository.login(email, password, object : APIListener<PersonModel> {
+            override fun onSuccess(result: PersonModel) {
 
-                mSharedPreferences.store(TaskConstants.SHARED.TOKEN_KEY,model.token)
-                mSharedPreferences.store(TaskConstants.SHARED.PERSON_KEY,model.personKey)
-                mSharedPreferences.store(TaskConstants.SHARED.PERSON_NAME,model.name)
+                securityPreferences.store(TaskConstants.SHARED.TOKEN_KEY,result.token)
+                securityPreferences.store(TaskConstants.SHARED.PERSON_KEY,result.personKey)
+                securityPreferences.store(TaskConstants.SHARED.PERSON_NAME,result.name)
 
-                RetrofitClient.addHeader(model.token, model.personKey)
+                RetrofitClient.addHeader(result.token, result.personKey)
 
-                mLogin.value = ValidationListener()
+                _login.value = ValidationListener()
             }
 
-            override fun onFailure(str: String) {
-                mLogin.value =  ValidationListener(str)
+            override fun onFailure(message: String) {
+                _login.value =  ValidationListener(message)
             }
 
         })
@@ -67,7 +67,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         val logged = ( token != "" && person != "" )
 
         if (!logged){
-            mPriorityRepository.all()
+            priorityRepository.all()
         }
         mLoggedUser.value  = logged
 
@@ -75,21 +75,21 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isAuthenticationAvailable() {
 
-        val token = mSharedPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
-        val person = mSharedPreferences.get(TaskConstants.SHARED.PERSON_KEY)
+        val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
+        val person = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)
 
         RetrofitClient.addHeader(token, person)
 
         val everLogged = ( token != "" && person != "" )
 
         if (!everLogged){
-            mPriorityRepository.all()
+            priorityRepository.all()
         }
-        mLoggedUser.value  = everLogged
+        _loggedUser.value  = everLogged
 
 
         if (FingerprintHelper.isAuthenticationAvailable(getApplication())){
-            mFingerprint.value = everLogged
+            _fingerprint.value = everLogged
         }
     }
 }
