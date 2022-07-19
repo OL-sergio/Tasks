@@ -8,12 +8,9 @@ import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
 import com.example.tasks.R
 import com.example.tasks.databinding.ActivityMainBinding
@@ -21,25 +18,22 @@ import com.example.tasks.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
-    private var _binding:  ActivityMainBinding?  = null
-
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var binding: ActivityMainBinding
     private lateinit var mViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(_binding!!.root)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.appBarMain.toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-           startActivity(Intent(this, TaskFormActivity::class.java))
+        binding.appBarMain.fab.setOnClickListener {
+            startActivity(Intent(applicationContext, TaskFormActivity::class.java))
         }
 
         // Navegação
@@ -55,20 +49,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun setupNavigation() {
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView =  binding.navView
+        val navController  = findNavController(R.id.nav_host_fragment_content_main)
 
-        val drawerLayout: DrawerLayout = _binding!!.drawerLayout
-        val navView: NavigationView =  _binding!!.navView
-        val navHostFragment  =  supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-   
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired, R.id.nav_logout),
-            drawerLayout
+            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired), drawerLayout
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -88,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observe() {
         mViewModel.userName.observe(this, Observer {
-            val nav = _binding!!.navView
+            val nav = binding.navView
             val header = nav.getHeaderView(0)
                 header.findViewById<TextView>(R.id.text_name).text = it
         })
