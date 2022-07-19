@@ -19,7 +19,6 @@ open class BaseRepository (context: Context){
                 else -> false
             }
         } else {
-            @Suppress("DEPRECATION")
             cm.run {
                 cm.activeNetworkInfo?.run {
                     result = when (type) {

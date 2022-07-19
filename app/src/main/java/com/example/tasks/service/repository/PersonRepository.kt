@@ -27,11 +27,10 @@ class PersonRepository(val context: Context) : BaseRepository(context){
         val call: Call<PersonModel> = mRemote.login(email, password)
         call.enqueue(object : Callback<PersonModel> {
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                if (response.code() != TaskConstants.HTTP.SUCCESS){
-                    listener.onFailure(failResponse(response.errorBody()!!.string()))
-
-                }else {
+                if (response.code() == TaskConstants.HTTP.SUCCESS){
                     response.body()?.let { listener.onSuccess(it) }
+                }else {
+                    listener.onFailure(failResponse(response.errorBody()!!.string()))
                 }
             }
 
@@ -51,10 +50,10 @@ class PersonRepository(val context: Context) : BaseRepository(context){
         val call: Call<PersonModel> = mRemote.create(name, email, password, true)
         call.enqueue(object : Callback<PersonModel> {
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                if (response.code() != TaskConstants.HTTP.SUCCESS){
-                    listener.onFailure(failResponse(response.errorBody()!!.string()))
-                }else {
+                if (response.code() == TaskConstants.HTTP.SUCCESS){
                     response.body()?.let { listener.onSuccess(it) }
+                }else {
+                    listener.onFailure(failResponse(response.errorBody()!!.string()))
                 }
             }
 
