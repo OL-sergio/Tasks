@@ -2,7 +2,7 @@ package com.example.tasks.service.model
 
 import com.google.gson.annotations.SerializedName
 
-class HeaderModel {
+class PersonModel {
 
     @SerializedName("token")
     var token : String = ""

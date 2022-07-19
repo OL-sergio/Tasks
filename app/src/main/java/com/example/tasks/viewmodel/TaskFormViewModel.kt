@@ -6,12 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.listener.ValidationListener
-import com.example.tasks.service.model.HeaderModel
 import com.example.tasks.service.model.PriorityModel
 import com.example.tasks.service.model.TaskModel
 import com.example.tasks.service.repository.PriorityRepository
 import com.example.tasks.service.repository.TaskRepository
-import java.util.*
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
 

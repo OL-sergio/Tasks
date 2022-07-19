@@ -12,7 +12,7 @@ class RetrofitClient private constructor() {
 
     companion object {
 
-        private lateinit var retrofit : Retrofit
+        private lateinit var INSTANCE : Retrofit
         private const val Base_URL = "http://devmasterteam.com/CursoAndroidAPI/"
         private var personKey = ""
         private var tonkenKey = ""
@@ -31,14 +31,16 @@ class RetrofitClient private constructor() {
                 }
             })
 
-            if (!Companion::retrofit.isInitialized){
-                retrofit = Retrofit.Builder()
-                    .baseUrl(Base_URL)
-                    .client(httpClient.build())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+            if (!::INSTANCE.isInitialized){
+                synchronized(RetrofitClient::class) {
+                    INSTANCE = Retrofit.Builder()
+                        .baseUrl(Base_URL)
+                        .client(httpClient.build())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                }
             }
-            return retrofit
+            return INSTANCE
         }
 
         fun addHeader(token: String, personKey: String){
@@ -46,7 +48,7 @@ class RetrofitClient private constructor() {
             this.tonkenKey = token
         }
 
-        fun <S> createService(serviceClass: Class<S>): S {
+        fun <T> createService(serviceClass: Class<T>): T {
             return getRetrofitInstance()
                 .create(serviceClass)
 
