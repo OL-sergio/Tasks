@@ -29,11 +29,7 @@ class PriorityRepository (val context: Context): BaseRepository(context) {
                 call: Call<List<PriorityModel>>,
                 response: Response<List<PriorityModel>>
             ) {
-                if (response.code() == TaskConstants.HTTP.SUCCESS){
-                    response.body()?.let { listener.onSuccess(it) }
-                } else {
-                    listener.onFailure(failResponse(response.errorBody()!!.string()))
-                }
+                handleResponse(response, listener)
             }
 
             override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
@@ -51,7 +47,4 @@ class PriorityRepository (val context: Context): BaseRepository(context) {
 
     fun getDescrition(id: Int) = priorityDatabase.getDescription(id)
 
-    private fun failResponse(validattion: String): String {
-        return  Gson().fromJson(validattion, String::class.java)
-    }
 }
