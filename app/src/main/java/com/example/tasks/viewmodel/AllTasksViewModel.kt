@@ -8,30 +8,36 @@ import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.example.tasks.service.model.ValidationModel
 import com.example.tasks.service.model.TaskModel
+import com.example.tasks.service.repository.PriorityRepository
 import com.example.tasks.service.repository.TaskRepository
 
 class AllTasksViewModel(application: Application) : AndroidViewModel(application) {
 
     private val taskRepository = TaskRepository(application.applicationContext)
+    private val priorityRepository = PriorityRepository(application.applicationContext)
     private var taskFilterID = 0
 
-    private val mValidation = MutableLiveData<ValidationModel>()
-    val validation: LiveData<ValidationModel> = mValidation
+    private val _validation = MutableLiveData<ValidationModel>()
+    val validation: LiveData<ValidationModel> = _validation
 
-    private val mTaskList = MutableLiveData<List<TaskModel>>()
-    val tasks: LiveData<List<TaskModel>> = mTaskList
+    private val _taskList = MutableLiveData<List<TaskModel>>()
+    val tasksList: LiveData<List<TaskModel>> = _taskList
 
     fun list(taskFilter: Int) {
         taskFilterID = taskFilter
 
         val listner = object :APIListener<List<TaskModel>>{
             override fun onSuccess(result: List<TaskModel>) {
-                mTaskList.value = result
+                result.forEach {
+                    it.priorityDescrition = priorityRepository.getDescrition(it.priorityId)
+                }
+
+                _taskList.value = result
             }
 
             override fun onFailure(message: String) {
-                mTaskList.value = arrayListOf()
-                mValidation.value = ValidationModel(message)
+                _taskList.value = arrayListOf()
+                _validation.value = ValidationModel(message)
             }
         }
 
@@ -48,11 +54,11 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         taskRepository.delete(id, object : APIListener<Boolean>{
             override fun onSuccess(result: Boolean) {
                 list(taskFilterID)
-                mValidation.value = ValidationModel()
+                _validation.value = ValidationModel()
             }
 
             override fun onFailure(message: String) {
-                mValidation.value = ValidationModel(message)
+                _validation.value = ValidationModel(message)
             }
 
         })
@@ -73,7 +79,7 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onFailure(message: String) {
-                mValidation.value = ValidationModel(message)
+                _validation.value = ValidationModel(message)
             }
 
         })

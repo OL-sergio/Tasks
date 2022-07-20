@@ -2,7 +2,7 @@ package com.example.tasks.service.model
 
 import com.google.gson.annotations.SerializedName
 
-class TaskModel {
+class TaskModel  {
     @SerializedName("Id")
     var id : Int = 0
 
@@ -17,5 +17,7 @@ class TaskModel {
 
     @SerializedName("Complete")
     var complete : Boolean = false
+
+    var priorityDescrition : String = ""
 
 }
