@@ -9,22 +9,22 @@ import com.example.tasks.service.repository.SecurityPreferences
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mSharedPreferences = SecurityPreferences(application)
+    private val sharedPreferences = SecurityPreferences(application.applicationContext)
 
-    private val mUserName = MutableLiveData<String>()
-    val userName: LiveData<String> = mUserName
+    private val _userName = MutableLiveData<String>()
+    val userName: LiveData<String> = _userName
 
     private val mLogout = MutableLiveData<Boolean>()
     val logout: LiveData<Boolean> = mLogout
 
     fun loadUserName() {
-        mUserName.value = mSharedPreferences.get(TaskConstants.SHARED.PERSON_NAME)
+        _userName.value = sharedPreferences.get(TaskConstants.SHARED.PERSON_NAME)
     }
 
     fun logout() {
-        mSharedPreferences.remove(TaskConstants.SHARED.TOKEN_KEY)
-        mSharedPreferences.remove(TaskConstants.SHARED.PERSON_KEY)
-        mSharedPreferences.remove(TaskConstants.SHARED.PERSON_NAME)
+        sharedPreferences.remove(TaskConstants.SHARED.TOKEN_KEY)
+        sharedPreferences.remove(TaskConstants.SHARED.PERSON_KEY)
+        sharedPreferences.remove(TaskConstants.SHARED.PERSON_NAME)
 
         mLogout.value = true
     }

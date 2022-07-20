@@ -1,6 +1,5 @@
 package com.example.tasks.view
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,9 +22,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
     private var _binding: ActivityTaskFormBinding? = null
 
     private lateinit var mViewModel: TaskFormViewModel
-    private val mDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
-    private val mListPriorityId: MutableList<Int> = arrayListOf()
-    private var mTaskID = 0
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+    private val listPriority: MutableList<Int> = arrayListOf()
+    private var taskID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +45,8 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
     private fun loadDataFromActivity() {
         val bundle = intent.extras
         if (bundle != null){
-            mTaskID = bundle.getInt(TaskConstants.BUNDLE.TASKID)
-            mViewModel.load(mTaskID)
+            taskID = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            mViewModel.load(taskID)
             _binding!!.buttonSave.text = getString(R.string.update_task)
         }
     }
@@ -76,7 +75,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             val list: MutableList<String> = arrayListOf()
             for (item in it ){
                 list.add(item.description)
-                mListPriorityId.add(item.id)
+                listPriority.add(item.id)
             }
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
@@ -85,7 +84,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
         mViewModel.taskSave.observe(this) {
             if (it.success()){
-                if (mTaskID == 0) {
+                if (taskID == 0) {
                     toast(getString(R.string.task_created))
                 } else{
                     toast(getString(R.string.task_updated))
@@ -102,7 +101,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
             _binding!!.spinnerPriority.setSelection(getIndex(it.priorityId))
 
             val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
-            _binding!!.buttonDate.text = mDateFormat.format(date!!)
+            _binding!!.buttonDate.text = dateFormat.format(date!!)
         })
     }
 
@@ -112,8 +111,8 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
     private fun getIndex(priorityId: Int): Int {
         var index = 0
-        for (i in 0 until mListPriorityId.count()){
-            if (mListPriorityId[i] == priorityId ){
+        for (i in 0 until listPriority.count()){
+            if (listPriority[i] == priorityId ){
                 index = i
                 break
             }
@@ -128,11 +127,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
     private fun handleSave() {
         val task = TaskModel().apply {
-            this.id = mTaskID
+            this.id = taskID
             this.description = _binding!!.editDescription.text.toString()
             this.complete = _binding!!.checkComplete.isChecked
             this.dueDate = _binding!!.buttonDate.text.toString()
-            this.priorityId = mListPriorityId[_binding!!.spinnerPriority.selectedItemPosition]
+            this.priorityId = listPriority[_binding!!.spinnerPriority.selectedItemPosition]
 
         }
         mViewModel.save(task)
@@ -142,7 +141,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         val calender = Calendar.getInstance()
         calender.set(year, month, dayOfMonth)
 
-        val dateString : String = mDateFormat.format(calender.time)
+        val dateString : String = dateFormat.format(calender.time)
         _binding!!.buttonDate.text = dateString
     }
 }

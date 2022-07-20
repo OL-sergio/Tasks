@@ -12,8 +12,8 @@ import com.example.tasks.service.repository.TaskRepository
 
 class AllTasksViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mTaskRepository = TaskRepository(application)
-    private var mTaskFilter = 0
+    private val taskRepository = TaskRepository(application.applicationContext)
+    private var taskFilterID = 0
 
     private val mValidation = MutableLiveData<ValidationModel>()
     val validation: LiveData<ValidationModel> = mValidation
@@ -22,37 +22,37 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     val tasks: LiveData<List<TaskModel>> = mTaskList
 
     fun list(taskFilter: Int) {
-        mTaskFilter = taskFilter
+        taskFilterID = taskFilter
 
         val listner = object :APIListener<List<TaskModel>>{
-            override fun onSuccess(model: List<TaskModel>) {
-                mTaskList.value = model
+            override fun onSuccess(result: List<TaskModel>) {
+                mTaskList.value = result
             }
 
-            override fun onFailure(str: String) {
+            override fun onFailure(message: String) {
                 mTaskList.value = arrayListOf()
-                mValidation.value = ValidationModel(str)
+                mValidation.value = ValidationModel(message)
             }
         }
 
-        if (mTaskFilter == TaskConstants.FILTER.ALL){
-            mTaskRepository.all(listner)
-        } else if (mTaskFilter == TaskConstants.FILTER.NEXT){
-            mTaskRepository.nextSevenDays(listner)
-        } else if (mTaskFilter == TaskConstants.FILTER.EXPIRED) {
-            mTaskRepository.overdue(listner)
+        if (taskFilterID == TaskConstants.FILTER.ALL){
+            taskRepository.all(listner)
+        } else if (taskFilterID == TaskConstants.FILTER.NEXT){
+            taskRepository.nextSevenDays(listner)
+        } else if (taskFilterID == TaskConstants.FILTER.EXPIRED) {
+            taskRepository.overdue(listner)
         }
     }
 
     fun delete(id: Int) {
-        mTaskRepository.delete(id, object : APIListener<Boolean>{
-            override fun onSuccess(model: Boolean) {
-                list(mTaskFilter)
+        taskRepository.delete(id, object : APIListener<Boolean>{
+            override fun onSuccess(result: Boolean) {
+                list(taskFilterID)
                 mValidation.value = ValidationModel()
             }
 
-            override fun onFailure(str: String) {
-                mValidation.value = ValidationModel(str)
+            override fun onFailure(message: String) {
+                mValidation.value = ValidationModel(message)
             }
 
         })
@@ -67,12 +67,13 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     }
 
     private fun upadateStatus(id: Int, complete: Boolean){
-        mTaskRepository.upadteStatus(id, complete, object : APIListener<Boolean>{
-            override fun onSuccess(model: Boolean) {
-                list(mTaskFilter)
+        taskRepository.upadteStatus(id, complete, object : APIListener<Boolean>{
+            override fun onSuccess(result: Boolean) {
+                list(taskFilterID)
             }
 
-            override fun onFailure(str: String) {
+            override fun onFailure(message: String) {
+                mValidation.value = ValidationModel(message)
             }
 
         })

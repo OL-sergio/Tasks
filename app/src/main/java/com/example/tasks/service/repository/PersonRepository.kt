@@ -15,7 +15,7 @@ import retrofit2.Response
 
 class PersonRepository(val context: Context) : BaseRepository(context){
 
-    private val mRemote = RetrofitClient.createService(PersonService::class.java)
+    private val remote = RetrofitClient.createService(PersonService::class.java)
 
     fun login (email: String, password: String, listener: APIListener<PersonModel>){
 
@@ -24,7 +24,7 @@ class PersonRepository(val context: Context) : BaseRepository(context){
             return
         }
 
-        val call: Call<PersonModel> = mRemote.login(email, password)
+        val call: Call<PersonModel> = remote.login(email, password)
         call.enqueue(object : Callback<PersonModel> {
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
                 handleResponse(response, listener)
@@ -43,7 +43,7 @@ class PersonRepository(val context: Context) : BaseRepository(context){
             return
         }
 
-        val call: Call<PersonModel> = mRemote.create(name, email, password, true)
+        val call: Call<PersonModel> = remote.create(name, email, password, true)
         call.enqueue(object : Callback<PersonModel> {
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
                 handleResponse(response, listener)

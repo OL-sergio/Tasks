@@ -13,25 +13,25 @@ import com.example.tasks.service.repository.SecurityPreferences
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mPersonRepository = PersonRepository(application)
-    private val mSharedPreferences = SecurityPreferences(application)
+    private val personRepository = PersonRepository(application.applicationContext)
+    private val sharedPreferences = SecurityPreferences(application.applicationContext)
 
-    private val mCreate = MutableLiveData<ValidationModel>()
-    val create: LiveData<ValidationModel> = mCreate
+    private val _create = MutableLiveData<ValidationModel>()
+    val create: LiveData<ValidationModel> = _create
 
     fun create(name: String, email: String, password: String) {
 
-        mPersonRepository.create(name, email, password, object : APIListener<PersonModel>{
-            override fun onSuccess(model: PersonModel) {
-                mSharedPreferences.store(TaskConstants.SHARED.TOKEN_KEY,model.token)
-                mSharedPreferences.store(TaskConstants.SHARED.PERSON_KEY,model.personKey)
-                mSharedPreferences.store(TaskConstants.SHARED.PERSON_NAME,model.name)
+        personRepository.create(name, email, password, object : APIListener<PersonModel>{
+            override fun onSuccess(result: PersonModel) {
+                sharedPreferences.store(TaskConstants.SHARED.TOKEN_KEY,result.token)
+                sharedPreferences.store(TaskConstants.SHARED.PERSON_KEY,result.personKey)
+                sharedPreferences.store(TaskConstants.SHARED.PERSON_NAME,result.name)
 
-                mCreate.value  = ValidationModel()
+                _create.value  = ValidationModel()
             }
 
-            override fun onFailure(str: String) {
-                mCreate.value = ValidationModel(str)
+            override fun onFailure(message: String) {
+                _create.value = ValidationModel(message)
             }
 
 

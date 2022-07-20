@@ -25,9 +25,9 @@ class AllTasksFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mViewModel: AllTasksViewModel
-    private lateinit var mListener: TaskListener
+    private lateinit var listener: TaskListener
     private val mAdapter = TaskAdapter()
-    private var mTaskFilter  = 0
+    private var taskFilter  = 0
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
@@ -37,14 +37,14 @@ class AllTasksFragment : Fragment() {
         val root: View = binding.root
 
         //Filter Tasks
-        mTaskFilter = arguments!!.getInt(TaskConstants.BUNDLE.TASKFILTER, 0)
+        taskFilter = arguments!!.getInt(TaskConstants.BUNDLE.TASKFILTER, 0)
 
         val recycler = _binding!!.recyclerAllTasks
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = mAdapter
 
         // Eventos disparados ao clicar nas linhas da RecyclerView
-        mListener = object : TaskListener {
+        listener = object : TaskListener {
             override fun onListClick(id: Int) {
                 val intent = Intent(context, TaskFormActivity::class.java)
                 val bundle = Bundle()
@@ -75,8 +75,8 @@ class AllTasksFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mAdapter.attachListener(mListener)
-        mViewModel.list(mTaskFilter)
+        mAdapter.attachListener(listener)
+        mViewModel.list(taskFilter)
     }
 
     private fun observe() {
