@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.model.PersonModel
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
-import com.example.tasks.service.listener.ValidationListener
+import com.example.tasks.service.model.ValidationModel
 import com.example.tasks.service.repository.PersonRepository
 import com.example.tasks.service.repository.SecurityPreferences
 
@@ -16,8 +16,8 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private val mPersonRepository = PersonRepository(application)
     private val mSharedPreferences = SecurityPreferences(application)
 
-    private val mCreate = MutableLiveData<ValidationListener>()
-    val create: LiveData<ValidationListener> = mCreate
+    private val mCreate = MutableLiveData<ValidationModel>()
+    val create: LiveData<ValidationModel> = mCreate
 
     fun create(name: String, email: String, password: String) {
 
@@ -27,11 +27,11 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 mSharedPreferences.store(TaskConstants.SHARED.PERSON_KEY,model.personKey)
                 mSharedPreferences.store(TaskConstants.SHARED.PERSON_NAME,model.name)
 
-                mCreate.value  = ValidationListener()
+                mCreate.value  = ValidationModel()
             }
 
             override fun onFailure(str: String) {
-                mCreate.value = ValidationListener(str)
+                mCreate.value = ValidationModel(str)
             }
 
 

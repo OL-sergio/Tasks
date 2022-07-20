@@ -12,7 +12,7 @@ import retrofit2.Response
 
 open class BaseRepository (context: Context){
 
-    fun failResponse(validattion: String): String {
+    private fun failResponse(validattion: String): String {
         return  Gson().fromJson(validattion, String::class.java)
     }
 

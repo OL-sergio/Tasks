@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.helper.FingerprintHelper
 import com.example.tasks.service.listener.APIListener
-import com.example.tasks.service.listener.ValidationListener
+import com.example.tasks.service.model.ValidationModel
 import com.example.tasks.service.model.PersonModel
 import com.example.tasks.service.model.PriorityModel
 import com.example.tasks.service.repository.PersonRepository
@@ -22,8 +22,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
-    private val _login = MutableLiveData<ValidationListener>()
-    val login: LiveData<ValidationListener> = _login
+    private val _login = MutableLiveData<ValidationModel>()
+    val login: LiveData<ValidationModel> = _login
 
 
     private val _loggedUser = MutableLiveData<Boolean>()
@@ -45,11 +45,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
                 RetrofitClient.addHeader(result.token, result.personKey)
 
-                _login.value = ValidationListener()
+                _login.value = ValidationModel()
             }
 
             override fun onFailure(message: String) {
-                _login.value =  ValidationListener(message)
+                _login.value =  ValidationModel(message)
             }
 
         })

@@ -70,11 +70,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
     }
 
 
-
-    @SuppressLint("SimpleDateFormat")
     private fun observe() {
 
-        mViewModel.priorities.observe(this, Observer{
+        mViewModel.priorityList.observe(this){
             val list: MutableList<String> = arrayListOf()
             for (item in it ){
                 list.add(item.description)
@@ -83,20 +81,20 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
             val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
             _binding!!.spinnerPriority.adapter = adapter
-        })
+        }
 
-        mViewModel.validation.observe(this, Observer {
-                if (it.success()){
-                    if (mTaskID == 0) {
-                        toast(getString(R.string.task_created))
-                    } else{
-                        toast(getString(R.string.task_updated))
-                    }
-                    finish()
-                } else {
-                    toast(it.failure())
+        mViewModel.taskSave.observe(this) {
+            if (it.success()){
+                if (mTaskID == 0) {
+                    toast(getString(R.string.task_created))
+                } else{
+                    toast(getString(R.string.task_updated))
                 }
-        })
+                finish()
+            } else {
+                toast(it.failure())
+            }
+        }
 
         mViewModel.task.observe(this, Observer{
             _binding!!.editDescription.setText(it.description)
@@ -105,9 +103,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
 
             val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
             _binding!!.buttonDate.text = mDateFormat.format(date!!)
-
         })
-
     }
 
     private fun toast(str:String) {
@@ -124,7 +120,6 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         }
         return index
     }
-
 
     private fun listeners() {
         _binding!!.buttonSave.setOnClickListener(this)
@@ -143,7 +138,6 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         mViewModel.save(task)
     }
 
-
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val calender = Calendar.getInstance()
         calender.set(year, month, dayOfMonth)
@@ -151,5 +145,4 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
         val dateString : String = mDateFormat.format(calender.time)
         _binding!!.buttonDate.text = dateString
     }
-
 }

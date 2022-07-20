@@ -10,29 +10,29 @@ import com.example.tasks.view.viewholder.TaskViewHolder
 
 class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
 
-    private var mList: List<TaskModel> = arrayListOf()
-    private lateinit var mListener: TaskListener
+    private var listTask: List<TaskModel> = arrayListOf()
+    private lateinit var listener: TaskListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemBinding = RowTaskListBinding.inflate(inflater, parent, false)
-        return TaskViewHolder(itemBinding, mListener)
+        return TaskViewHolder(itemBinding, listener)
     }
 
     override fun getItemCount(): Int {
-        return mList.count()
+        return listTask.count()
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bindData(mList[position])
+        holder.bindData(listTask[position])
     }
 
-    fun attachListener(listener: TaskListener) {
-        mListener = listener
+    fun attachListener(tasklistener: TaskListener) {
+        listener = tasklistener
     }
 
     fun updateListener(list: List<TaskModel>) {
-        mList = list
+        listTask = list
         this.notifyDataSetChanged()
     }
 
