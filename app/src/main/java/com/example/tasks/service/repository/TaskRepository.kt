@@ -79,7 +79,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
             return
         }
-        val call: Call<Boolean> = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
+        val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
         call.enqueue(object : Callback<Boolean>{
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 handleResponse(response, listener)
@@ -96,8 +96,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
             return
         }
-        val call: Call<Boolean> =
-            remote.update( task.id, task.priorityId, task.description, task.dueDate, task.complete)
+        val call = remote.update( task.id, task.priorityId, task.description, task.dueDate, task.complete)
         call.enqueue(object : Callback<Boolean>{
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 handleResponse(response, listener)
@@ -114,7 +113,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
             return
         }
-        val call: Call<TaskModel> = remote.select(id)
+        val call = remote.select(id)
         call.enqueue(object : Callback<TaskModel>{
             override fun onResponse(call: Call<TaskModel>, response: Response<TaskModel>) {
                 handleResponse(response, listener)
@@ -133,7 +132,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
             return
         }
-        val call: Call<Boolean> = remote.delete(id)
+        val call = remote.delete(id)
         call.enqueue(object : Callback<Boolean>{
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 handleResponse(response, listener)

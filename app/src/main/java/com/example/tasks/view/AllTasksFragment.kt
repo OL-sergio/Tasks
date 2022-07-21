@@ -80,13 +80,15 @@ class AllTasksFragment : Fragment() {
     }
 
     private fun observe() {
-        mViewModel.tasksList.observe(viewLifecycleOwner, Observer {
+        mViewModel.tasksList.observe(viewLifecycleOwner) {
             if (it.count() > 0){
                 mAdapter.updateListener(it)
             }
-        })
+        }
 
-        mViewModel.validation.observe(viewLifecycleOwner, Observer{
+
+
+        mViewModel.delete.observe(viewLifecycleOwner, Observer{
             if (it.success()){
                 Toast.makeText(context,getString(R.string.task_removed) ,Toast.LENGTH_SHORT).show()
             } else {

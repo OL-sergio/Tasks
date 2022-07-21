@@ -17,8 +17,8 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private var taskFilterID = 0
 
-    private val _validation = MutableLiveData<ValidationModel>()
-    val validation: LiveData<ValidationModel> = _validation
+    private val _delete = MutableLiveData<ValidationModel>()
+    val delete: LiveData<ValidationModel> = _delete
 
     private val _taskList = MutableLiveData<List<TaskModel>>()
     val tasksList: LiveData<List<TaskModel>> = _taskList
@@ -37,7 +37,7 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
 
             override fun onFailure(message: String) {
                 _taskList.value = arrayListOf()
-                _validation.value = ValidationModel(message)
+                _delete.value = ValidationModel(message)
             }
         }
 
@@ -54,11 +54,11 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         taskRepository.delete(id, object : APIListener<Boolean>{
             override fun onSuccess(result: Boolean) {
                 list(taskFilterID)
-                _validation.value = ValidationModel()
+                _delete.value = ValidationModel()
             }
 
             override fun onFailure(message: String) {
-                _validation.value = ValidationModel(message)
+                _delete.value = ValidationModel(message)
             }
 
         })
@@ -79,11 +79,8 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onFailure(message: String) {
-                _validation.value = ValidationModel(message)
+                _delete.value = ValidationModel(message)
             }
-
         })
-
     }
-
 }
