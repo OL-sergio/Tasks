@@ -15,25 +15,18 @@ import java.util.*
 class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: TaskListener) :
     RecyclerView.ViewHolder(itemBinding.root) {
 
-
-    private val dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
     /**
      * Atribui valores aos elementos de interface e também eventos
      */
 
     fun bindData(task: TaskModel) {
 
-        itemBinding.textDescription.text = ""
-        itemBinding.textPriority.text = ""
-        itemBinding.textDueDate.text = ""
-
-
         itemBinding.textDescription.text = task.description
         itemBinding.textPriority.text = task.priorityDescrition
 
 
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate)
-        itemBinding.textDueDate.text = dateFormat.format(date!!)
+        itemBinding.textDueDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(date!!)
 
 
         if (task.complete){

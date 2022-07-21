@@ -89,5 +89,4 @@ class MainActivity : AppCompatActivity() {
             finish()
         })
     }
-
 }
