@@ -16,8 +16,8 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private val personRepository = PersonRepository(application.applicationContext)
     private val sharedPreferences = SecurityPreferences(application.applicationContext)
 
-    private val _create = MutableLiveData<ValidationModel>()
-    val create: LiveData<ValidationModel> = _create
+    private val _user = MutableLiveData<ValidationModel>()
+    val user: LiveData<ValidationModel> = _user
 
     fun create(name: String, email: String, password: String) {
 
@@ -27,19 +27,14 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 sharedPreferences.store(TaskConstants.SHARED.PERSON_KEY,result.personKey)
                 sharedPreferences.store(TaskConstants.SHARED.PERSON_NAME,result.name)
 
-                _create.value  = ValidationModel()
+                _user.value  = ValidationModel()
             }
 
             override fun onFailure(message: String) {
-                _create.value = ValidationModel(message)
+                _user.value = ValidationModel(message)
             }
 
 
         })
     }
-
-    fun listPriorities() {
-
-    }
-
 }

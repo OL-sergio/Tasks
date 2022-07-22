@@ -14,7 +14,6 @@ import com.example.tasks.viewmodel.RegisterViewModel
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
     private var _binding: ActivityRegisterBinding? = null
-
     private lateinit var mViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,24 +31,28 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         val id = v.id
         if (id == R.id.button_save) {
-
-            val name = _binding!!.editName.text.toString()
-            val email = _binding!!.editEmail.text.toString()
-            val password = _binding!!.editPassword.text.toString()
-
-            mViewModel.create(name, email, password)
+            handleSave()
         }
     }
 
+    private fun handleSave() {
+        val name = _binding!!.editName.text.toString()
+        val email = _binding!!.editEmail.text.toString()
+        val password = _binding!!.editPassword.text.toString()
+
+        mViewModel.create(name, email, password)
+
+    }
+
     private fun observe() {
-        mViewModel.create.observe(this, Observer {
+        mViewModel.user.observe(this) {
             if (it.success()){
                 startActivity(Intent(this, LoginActivity::class.java))
             }else{
 
                 Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
     private fun listeners() {

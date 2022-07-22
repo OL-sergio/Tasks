@@ -24,7 +24,7 @@ class AllTasksFragment : Fragment() {
 
     private lateinit var mViewModel: AllTasksViewModel
     private lateinit var listener: TaskListener
-    private val mAdapter = TaskAdapter()
+    private val adapter = TaskAdapter()
     private var taskFilter  = 0
 
 
@@ -39,7 +39,7 @@ class AllTasksFragment : Fragment() {
 
         val recycler = _binding!!.recyclerAllTasks
         recycler.layoutManager = LinearLayoutManager(context)
-        recycler.adapter = mAdapter
+        recycler.adapter = adapter
 
         // Eventos disparados ao clicar nas linhas da RecyclerView
         listener = object : TaskListener {
@@ -73,15 +73,18 @@ class AllTasksFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mAdapter.attachListener(listener)
+        adapter.attachListener(listener)
         mViewModel.list(taskFilter)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observe() {
         mViewModel.tasksList.observe(viewLifecycleOwner) {
-            if (it.count() > 0){
-                mAdapter.updateListener(it)
-            }
+                adapter.updateListener(it)
         }
 
         mViewModel.delete.observe(viewLifecycleOwner){
