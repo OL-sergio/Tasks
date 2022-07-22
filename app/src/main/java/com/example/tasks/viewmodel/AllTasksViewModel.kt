@@ -17,6 +17,9 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private var taskFilterID = 0
 
+    private val _updateStatus = MutableLiveData<ValidationModel>()
+    val updateStatus: LiveData<ValidationModel> = _updateStatus
+
     private val _delete = MutableLiveData<ValidationModel>()
     val delete: LiveData<ValidationModel> = _delete
 
@@ -64,23 +67,22 @@ class AllTasksViewModel(application: Application) : AndroidViewModel(application
         })
     }
 
-    fun complete(id: Int) {
-      upadateStatus(id, true)
-    }
-
-    fun undo(id: Int) {
-        upadateStatus(id, false)
-    }
-
-    private fun upadateStatus(id: Int, complete: Boolean){
-        taskRepository.upadteStatus(id, complete, object : APIListener<Boolean>{
+    fun upadateStatus(id: Int, complete: Boolean){
+       val listener =  object : APIListener<Boolean>{
             override fun onSuccess(result: Boolean) {
                 list(taskFilterID)
+                _updateStatus.value = ValidationModel()
             }
 
             override fun onFailure(message: String) {
-                _delete.value = ValidationModel(message)
+                _updateStatus.value = ValidationModel(message)
             }
-        })
+        }
+
+        if(complete) {
+            taskRepository.complete(id, listener)
+        } else {
+            taskRepository.undo(id, listener)
+        }
     }
 }

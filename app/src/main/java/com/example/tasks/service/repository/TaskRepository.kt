@@ -44,22 +44,6 @@ class TaskRepository (context: Context) : BaseRepository(context) {
         executeCall(call, listener)
     }
 
-    fun upadteStatus(id: Int, complete: Boolean, listener: APIListener<Boolean>){
-
-        if (!isConnectionAvailable(context)){
-            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
-            return
-        }
-
-        val call: Call<Boolean> = if (complete){
-            remote.complete(id)
-
-        }else{
-            remote.update(id)
-        }
-        executeCall(call, listener)
-    }
-
     fun create (task: TaskModel, listener: APIListener<Boolean>) {
         if (!isConnectionAvailable(context)){
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
@@ -93,6 +77,24 @@ class TaskRepository (context: Context) : BaseRepository(context) {
             return
         }
         val call = remote.delete(id)
+        executeCall(call, listener)
+    }
+
+    fun complete(id: Int, listener: APIListener<Boolean>){
+        if (!isConnectionAvailable(context)){
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
+            return
+        }
+        val call = remote.complete(id)
+        executeCall(call, listener)
+    }
+
+    fun undo(id: Int, listener: APIListener<Boolean>){
+        if (!isConnectionAvailable(context)){
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
+            return
+        }
+        val call = remote.update(id)
         executeCall(call, listener)
     }
 }

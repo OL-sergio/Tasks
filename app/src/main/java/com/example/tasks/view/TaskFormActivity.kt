@@ -91,7 +91,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener, DatePickerDi
                 }
                 finish()
             } else {
-                toast(it.failure())
+                toast(it.message())
             }
         }
 

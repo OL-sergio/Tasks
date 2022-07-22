@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }else{
 
-                Toast.makeText(this, it.failure(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
             }
         })
 

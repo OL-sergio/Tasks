@@ -1,6 +1,5 @@
 package com.example.tasks.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.R
 import com.example.tasks.databinding.FragmentAllTasksBinding
 import com.example.tasks.service.constants.TaskConstants
@@ -58,11 +56,11 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onCompleteClick(id: Int) {
-                mViewModel.complete(id)
+                mViewModel.upadateStatus(id, true)
             }
 
             override fun onUndoClick(id: Int) {
-                mViewModel.undo(id)
+                mViewModel.upadateStatus(id, false)
             }
         }
 
@@ -86,15 +84,20 @@ class AllTasksFragment : Fragment() {
             }
         }
 
-
-
-        mViewModel.delete.observe(viewLifecycleOwner, Observer{
+        mViewModel.delete.observe(viewLifecycleOwner){
             if (it.success()){
                 Toast.makeText(context,getString(R.string.task_removed) ,Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context,it.failure() ,Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,it.message() ,Toast.LENGTH_SHORT).show()
             }
-        })
-    }
+        }
 
+        mViewModel.updateStatus.observe(viewLifecycleOwner){
+            if (it.success()){
+                Toast.makeText(context,getString(R.string.task_updated) ,Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context,it.message() ,Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }

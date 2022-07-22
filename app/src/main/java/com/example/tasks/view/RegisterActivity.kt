@@ -47,7 +47,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(Intent(this, LoginActivity::class.java))
             }else{
 
-                Toast.makeText(this, it.failure(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
             }
         })
     }

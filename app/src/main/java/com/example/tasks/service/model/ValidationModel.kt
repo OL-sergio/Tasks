@@ -14,6 +14,6 @@ class ValidationModel (message: String = "")  {
     }
 
     fun success() = status
-    fun failure() = validationMessasage
+    fun message() = validationMessasage
 
 }
