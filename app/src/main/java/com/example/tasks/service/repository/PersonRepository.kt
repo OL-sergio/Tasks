@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PersonRepository(val context: Context) : BaseRepository(context){
+class PersonRepository( context: Context) : BaseRepository(context){
 
     private val remote = RetrofitClient.createService(PersonService::class.java)
 
@@ -24,16 +24,8 @@ class PersonRepository(val context: Context) : BaseRepository(context){
             return
         }
 
-        val call: Call<PersonModel> = remote.login(email, password)
-        call.enqueue(object : Callback<PersonModel> {
-            override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<PersonModel>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        val call = remote.login(email, password)
+        executeCall(call, listener)
     }
 
     fun create (name: String, email: String, password: String, listener: APIListener<PersonModel>){
@@ -43,15 +35,7 @@ class PersonRepository(val context: Context) : BaseRepository(context){
             return
         }
 
-        val call: Call<PersonModel> = remote.create(name, email, password, true)
-        call.enqueue(object : Callback<PersonModel> {
-            override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<PersonModel>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        val call = remote.create(name, email, password, true)
+        executeCall(call, listener)
     }
 }

@@ -12,42 +12,36 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TaskRepository (val context: Context) : BaseRepository(context) {
+class TaskRepository (context: Context) : BaseRepository(context) {
 
     private val remote = RetrofitClient.createService(TaskService::class.java)
 
     private fun list(call: Call <List<TaskModel>>, listener: APIListener<List<TaskModel>>){
-
         if (!isConnectionAvailable(context)){
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
             return
         }
-
-        call.enqueue(object : Callback<List<TaskModel>>{
-            override fun onResponse(call: Call<List<TaskModel>>, response: Response<List<TaskModel>>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<List<TaskModel>>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        executeCall(call, listener)
     }
 
 
     fun all(listener: APIListener<List<TaskModel>>) {
-        val call: Call<List<TaskModel>> = remote.all()
-        list(call, listener)
+        if (!isConnectionAvailable(context)){
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
+            return
+        }
+        val call = remote.all()
+       executeCall(call, listener)
     }
 
     fun nextSevenDays(listener: APIListener<List<TaskModel>>) {
-        val call: Call<List<TaskModel>> = remote.nextSevenDays()
-        list(call, listener)
+        val call = remote.nextSevenDays()
+        executeCall(call, listener)
     }
 
     fun overdue(listener: APIListener<List<TaskModel>>) {
-        val call: Call<List<TaskModel>> = remote.overdue()
-        list(call, listener)
+        val call = remote.overdue()
+        executeCall(call, listener)
     }
 
     fun upadteStatus(id: Int, complete: Boolean, listener: APIListener<Boolean>){
@@ -63,15 +57,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
         }else{
             remote.update(id)
         }
-        call.enqueue(object : Callback<Boolean>{
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        executeCall(call, listener)
     }
 
     fun create (task: TaskModel, listener: APIListener<Boolean>) {
@@ -80,15 +66,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             return
         }
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
-        call.enqueue(object : Callback<Boolean>{
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        executeCall(call, listener)
     }
 
     fun update (task: TaskModel, listener: APIListener<Boolean>) {
@@ -97,15 +75,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             return
         }
         val call = remote.update( task.id, task.priorityId, task.description, task.dueDate, task.complete)
-        call.enqueue(object : Callback<Boolean>{
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        executeCall(call, listener)
     }
 
     fun load (id: Int, listener: APIListener<TaskModel>) {
@@ -114,17 +84,7 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             return
         }
         val call = remote.select(id)
-        call.enqueue(object : Callback<TaskModel>{
-            override fun onResponse(call: Call<TaskModel>, response: Response<TaskModel>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<TaskModel>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-
-
-        })
+        executeCall(call, listener)
     }
 
     fun delete(id: Int, listener: APIListener<Boolean>){
@@ -133,14 +93,6 @@ class TaskRepository (val context: Context) : BaseRepository(context) {
             return
         }
         val call = remote.delete(id)
-        call.enqueue(object : Callback<Boolean>{
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        executeCall(call, listener)
     }
 }

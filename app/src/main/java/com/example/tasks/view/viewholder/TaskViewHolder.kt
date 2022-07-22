@@ -7,7 +7,6 @@ import com.example.tasks.R
 import com.example.tasks.databinding.RowTaskListBinding
 import com.example.tasks.service.listener.TaskListener
 import com.example.tasks.service.model.TaskModel
-import com.example.tasks.service.repository.PriorityRepository
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,9 +23,8 @@ class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: 
         itemBinding.textDescription.text = task.description
         itemBinding.textPriority.text = task.priorityDescrition
 
-
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate)
-        itemBinding.textDueDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(date!!)
+        itemBinding.textDueDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(date as Date)
 
 
         if (task.complete){

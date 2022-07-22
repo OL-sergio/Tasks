@@ -27,13 +27,15 @@ class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
         holder.bindData(listTask[position])
     }
 
-    fun attachListener(tasklistener: TaskListener) {
-        listener = tasklistener
-    }
-
     fun updateListener(list: List<TaskModel>) {
         listTask = list
         this.notifyDataSetChanged()
     }
+
+    fun attachListener(tasklistener: TaskListener) {
+        listener = tasklistener
+    }
+
+
 
 }

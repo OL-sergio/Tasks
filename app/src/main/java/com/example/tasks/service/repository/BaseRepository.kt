@@ -4,25 +4,36 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import com.example.tasks.R
 import com.example.tasks.service.constants.TaskConstants
 import com.example.tasks.service.listener.APIListener
 import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 
-open class BaseRepository (context: Context){
+open class BaseRepository (var context: Context){
 
     private fun failResponse(validattion: String): String {
         return  Gson().fromJson(validattion, String::class.java)
     }
 
-    fun <T> handleResponse(response: Response<T>, listener: APIListener<T>) =
-        if (response.code() == TaskConstants.HTTP.SUCCESS){
-            response.body()?.let { listener.onSuccess(it) }
-        }else {
-            listener.onFailure(failResponse(response.errorBody()!!.string()))
-        }
+    fun <T> executeCall(call: Call<T>, listener: APIListener<T>) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.code() == TaskConstants.HTTP.SUCCESS){
+                    response.body()?.let { listener.onSuccess(it) }
+                }else {
+                    listener.onFailure(failResponse(response.errorBody()!!.string()))
+                }
+            }
 
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
+            }
+        })
+    }
 
     fun isConnectionAvailable(context: Context): Boolean {
         var result = false

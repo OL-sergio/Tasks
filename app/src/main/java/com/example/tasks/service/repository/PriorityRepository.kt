@@ -13,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PriorityRepository (val context: Context): BaseRepository(context) {
+class PriorityRepository (context: Context): BaseRepository(context) {
 
     private val remote = RetrofitClient.createService(PriorityService::class.java)
     private val priorityDatabase = TaskDatabase.getDatabase(context).priorityDAO()
@@ -43,20 +43,8 @@ class PriorityRepository (val context: Context): BaseRepository(context) {
         if (!isConnectionAvailable(context)){
             return
         }
-
-        val call  = remote.list()
-        call.enqueue(object :Callback<List<PriorityModel>>{
-            override fun onResponse(
-                call: Call<List<PriorityModel>>,
-                response: Response<List<PriorityModel>>
-            ) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        val call = remote.list()
+        executeCall(call, listener)
     }
 
     fun save(list: List<PriorityModel>) {

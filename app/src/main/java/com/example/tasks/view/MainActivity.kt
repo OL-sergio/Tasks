@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.ui.*
 import com.example.tasks.R
 import com.example.tasks.databinding.ActivityMainBinding
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         val navController  = findNavController(R.id.nav_host_fragment_content_main)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired), drawerLayout
+            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired, R.id.nav_logout), drawerLayout
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
