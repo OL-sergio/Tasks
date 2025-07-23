@@ -96,20 +96,6 @@ O arquivo `proguard-rules.pro` contém as regras para o ProGuard, que é usado p
 
 Para mais detalhes sobre o ProGuard, consulte a [documentação oficial](http://developer.android.com/guide/developing/tools/proguard.html).
 
-## Contribuição
-
-1.  Faça um fork do projeto.
-2.  Crie uma branch para sua feature:
-
-    ```bash
-    git checkout -b minha-feature
-    ```
-3.  Faça as alterações e adicione commits descritivos.
-4.  Envie um pull request.
-
-## Licença
-
-Este projeto está licenciado sob a [Licença MIT](LICENSE).
 
 ## Badges
 
