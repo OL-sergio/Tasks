@@ -105,8 +105,5 @@ Para mais detalhes sobre o ProGuard, consulte a [documentação oficial](http://
 
 ## Contato
 
-[Seu Nome] - [seu-email@exemplo.com]
+Sérgio Oliveira -  a18074@alunas.ipca.pt
 
-## Agradecimentos
-
-Agradecimentos a [pessoas ou organizações que ajudaram no projeto].
